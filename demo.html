@@ -187,15 +187,17 @@ footer {
         <!-- MODE 1: MP4/WebM Video (Default)                         -->
         <!-- Plays automatically, muted for browser auto-play policies -->
         <!-- ======================================================= -->
-        <video 
-            id="modalVideo" 
-            class="ad-media" 
-            src="./VIYA.mp4" 
-            autoplay 
-            muted 
-            playsinline>
-            Your browser does not support video playback.
-        </video>
+        
+<video
+    id="modalVideo"
+    class="ad-media"
+    src="./VIYA.mp4"
+    autoplay
+    playsinline
+    preload="auto">
+    Your browser does not support video playback.
+</video>
+
 
         <!-- ======================================================= -->
         <!-- MODE 2: GIF Image (Uncomment below to use GIF instead)  -->
@@ -291,6 +293,17 @@ window.addEventListener("load", ()=>{
     if(isMobile()){
         showAd();
     }
+    
+if (video) {
+    video.currentTime = 0;
+    video.muted = false;
+    video.volume = 1;
+
+    video.play().catch(error => {
+        console.log("Browser blocked autoplay with sound:", error);
+    });
+}
+
 });
 
 // Responsive screen resize check
