@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="km">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Khmer Daily News - Demo</title>
+
+<style>
+
+/* =========================
+    BASE STYLES
+========================= */
+body {
+    font-family:'Kantumruy Pro','Arial',sans-serif;
+    margin:0;
+    background:#f0f2f5;
+}
+
+.container {
+    padding: 0 15px;
+}
+
+/* =========================
+    NEWS CONTENT
+========================= */
+
+header {
+    text-align:center;
+    padding:20px 0;
+    border-bottom:3px solid #0056b3;
+}
+
+.post h2 {
+    color:#1a1a1a;
+    line-height:1.4;
+    font-size:24px;
+}
+
+.post p {
+    line-height:1.8;
+    color:#333;
+}
+
+.sknteam_image {
+    text-align:center;
+    margin:20px 0;
+}
+
+.sknteam_image img {
+    width:50%;
+    max-width:100%;
+    border-radius:10px;
+}
+
+footer {
+    text-align:center;
+    padding:20px;
+    color:#777;
+}
+
+/* =========================
+    AD POPUP
+========================= */
+
+.ad-overlay {
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    z-index:99999;
+    background: rgba(0, 0, 0, 0.6);
+}
+
+.ad-overlay.show {
+    display:flex;
+}
+
+/* Advertisement box - Fixed to 800x450 with responsiveness */
+.ad-content {
+    width: 800px;
+    max-width: 95vw;
+    height: 450px;
+    max-height: 85vh;
+    position: relative;
+    border-radius: 25px;
+    overflow: hidden;
+    cursor: pointer;
+    background: #000;
+}
+
+/* Video & Image Media display inside Ad Content */
+.ad-media {
+    display:block;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+    border-radius:25px;
+}
+
+/* Close Button */
+.modal-close {
+    position:absolute;
+    top:12px;
+    right:12px;
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:none;
+    background:rgba(0,0,0,0.65);
+    color:white;
+    font-size:20px;
+    font-weight:bold;
+    cursor:pointer;
+    z-index:999999;
+    display:flex;
+    justify-content:center;
+    align-items:center;
+    transition: all 0.3s ease;
+}
+
+.modal-close:hover {
+    background:black;
+    transform:scale(1.1);
+}
+
+/* Prevent background body scroll */
+.no-scroll {
+    overflow:hidden;
+    height:100vh;
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <header>
+        <h1>សារព័ត៌មាន Khmer Daily</h1>
+    </header>
+
+    <div class="post">
+        <h2>ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប</h2>
+        <div class="sknteam_image">
+            <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="Angkor Sangkranta">
+        </div>
+        <p>ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។</p>
+        <p>ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។</p>
+    </div>
+
+    <div class="post">
+        <h2>ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប</h2>
+        <div class="sknteam_image">
+            <img src="https://sknteam.com/media/ai_cambodia.jpeg" alt="Angkor Sangkranta">
+        </div>
+        <p>ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។</p>
+        <p>ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។</p>
+    </div>
+
+    <footer>
+        រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 Khmer Daily News
+    </footer>
+
+</div>
+
+
+<!-- =========================
+        POPUP AD
+========================= -->
+<div id="adOverlay" class="ad-overlay">
+
+    <div id="adContent" class="ad-content">
+
+        <!-- MP4 Video (Muted removed so imported video sound plays) -->
+        <video
+            id="modalVideo"
+            class="ad-media"
+            src="./Ask VIYA_Ads_Desktop_001.mp4"
+            autoplay
+            playsinline
+            preload="auto">
+            Your browser does not support video playback.
+        </video>
+
+        <button id="modalClose" class="modal-close" aria-label="Close Advertisement">✕</button>
+
+    </div>
+
+</div>
+
+
+<script>
+(function(){
+
+const overlay = document.getElementById("adOverlay");
+const closeBtn = document.getElementById("modalClose");
+const adContent = document.getElementById("adContent");
+const video = document.getElementById("modalVideo");
+
+const landingPageUrl = "https://www.facebook.com/viyacambodiaconsumer?mibextid=wwXIfr&rdid=iRNRIykDPJMGFLLd&share_url=https%253A%252F%252Fwww.facebook.com%252Fshare%252F17n8yusZHt%252F%253Fmibextid%253DwwXIfr";
+
+let scrollY = 0;
+
+// Check if desktop device (width greater than 768px)
+function isDesktop(){
+    return window.innerWidth > 768;
+}
+
+// Lock background scroll when modal opens
+function lockScroll(){
+    scrollY = window.scrollY;
+    document.body.style.position = "fixed";
+    document.body.style.top = `-${scrollY}px`;
+    document.body.style.width = "100%";
+}
+
+// Unlock background scroll when modal closes
+function unlockScroll(){
+    document.body.style.position = "";
+    document.body.style.top = "";
+    document.body.style.width = "";
+    window.scrollTo(0, scrollY);
+}
+
+// Show the Ad
+function showAd(){
+    if(!isDesktop()){
+        return;
+    }
+
+    overlay.classList.add("show");
+    lockScroll();
+
+    if (video) {
+        video.currentTime = 0;
+        const playPromise = video.play();
+        if (playPromise !== undefined) {
+            playPromise.catch(error => {
+                console.log("Autoplay blocked:", error);
+            });
+        }
+    }
+}
+
+// Hide the Ad
+function hideAd(){
+    overlay.classList.remove("show");
+    unlockScroll();
+
+    if (video) {
+        video.pause();
+    }
+}
+
+// Auto-close ad when video completes playback
+if (video) {
+    video.addEventListener("ended", hideAd);
+}
+
+// Show popup once page loads (if desktop)
+window.addEventListener("load", ()=>{
+    if(isDesktop()){
+        showAd();
+    }
+});
+
+// Responsive screen resize check
+window.addEventListener("resize", ()=>{
+    if(!isDesktop()){
+        hideAd();
+    }
+});
+
+// Close button click
+closeBtn.addEventListener("click", (e)=>{
+    e.stopPropagation();
+    hideAd();
+});
+
+// Click on ad body redirects to target URL
+adContent.addEventListener("click", ()=>{
+    window.location.href = landingPageUrl;
+});
+
+// Click on dark backdrop closes modal
+overlay.addEventListener("click", (e)=>{
+    if(e.target === overlay){
+        hideAd();
+    }
+});
+
+// Close on ESC keypress
+document.addEventListener("keydown", (e)=>{
+    if(e.key === "Escape"){
+        hideAd();
+    }
+});
+
+})();
+</script>
+
+</body>
+</html>
