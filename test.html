@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="km">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Khmer Daily News</title>
+
+    <!-- Load your existing external popup script -->
+    <script
+        src="https://sknteam.com/ad-scripts/popup/revive-popup.js"
+        defer>
+    </script>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: "Kantumruy Pro", Arial, sans-serif;
+            background: #f0f2f5;
+            color: #222;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: auto;
+            padding: 0 15px;
+        }
+
+        header {
+            padding: 20px 0;
+            text-align: center;
+            border-bottom: 3px solid #0056b3;
+        }
+
+        header h1 {
+            margin: 0;
+            color: #0056b3;
+        }
+
+        .post {
+            padding: 20px 0;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .post h2 {
+            font-size: 23px;
+            line-height: 1.6;
+        }
+
+        .post p {
+            color: #333;
+            line-height: 1.9;
+        }
+
+        .sknteam_image {
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .sknteam_image img {
+            display: block;
+            width: 100%;
+            max-width: 500px;
+            height: auto;
+            margin: auto;
+            border-radius: 10px;
+        }
+
+        footer {
+            padding: 20px 0;
+            text-align: center;
+            color: #777;
+        }
+
+        /* Popup structure, available for a script that supports it */
+        .ad-overlay {
+            position: fixed;
+            inset: 0;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 12px;
+            background: rgba(0, 0, 0, 0.75);
+            z-index: 99999;
+        }
+
+        .ad-overlay.show {
+            display: flex;
+        }
+
+        .ad-content {
+            position: relative;
+            width: min(90vw, 420px);
+            max-height: 90vh;
+            overflow: hidden;
+            border-radius: 20px;
+            background: #000;
+        }
+
+        .ad-media {
+            display: block;
+            width: 100%;
+            max-height: 90vh;
+            height: auto;
+            object-fit: contain;
+        }
+
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 2;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 38px;
+            height: 38px;
+            border: 0;
+            border-radius: 50%;
+            background: rgba(0, 0, 0, 0.75);
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+    
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <header>
+            <h1>សារព័ត៌មាន Khmer Daily</h1>
+        </header>
+
+        <main>
+            <article class="post">
+                <h2>ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប</h2>
+
+                <div class="sknteam_image">
+                    <img
+                        src="https://sknteam.com/media/ai_cambodia.jpeg"
+                        alt="អង្គរសង្ក្រាន្ត">
+                </div>
+
+                <p>ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។</p>
+
+                <p>ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។</p>
+            </article>
+
+            <article class="post">
+                <h2>ព័ត៌មានវប្បធម៌ និងប្រពៃណីខ្មែរ</h2>
+
+                <div class="sknteam_image">
+                    <img
+                        src="https://sknteam.com/media/ai_cambodia.jpeg"
+                        alt="វប្បធម៌ខ្មែរ">
+                </div>
+
+                <p>សូមតាមដានព័ត៌មានថ្មីៗ និងព្រឹត្តិការណ៍សំខាន់ៗនៅកម្ពុជា តាមរយៈ Khmer Daily News។</p>
+            </article>
+        </main>
+
+        <footer>
+            រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 Khmer Daily News
+        </footer>
+    </div>
+
+    <!-- Popup markup: only useful if revive-popup.js supports
+         these element IDs/classes or uses this markup by configuration. -->
+    <div id="adOverlay" class="ad-overlay">
+        <div id="adContent" class="ad-content">
+
+            <video
+                id="modalVideo"
+                class="ad-media"
+                src="./VIYA.mp4"
+                autoplay
+                muted
+                playsinline
+                preload="auto">
+                Your browser does not support video playback.
+            </video>
+
+            <button
+                id="modalClose"
+                class="modal-close"
+                type="button"
+                aria-label="Close advertisement">
+                &times;
+            </button>
+
+        </div>
+    </div>
+</body>
+</html>

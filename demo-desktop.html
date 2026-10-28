@@ -13,13 +13,15 @@
     BASE STYLES
 ========================= */
 body {
-    font-family:'Kantumruy Pro','Arial',sans-serif;
-    margin:0;
-    background:#f0f2f5;
+    font-family: 'Kantumruy Pro', 'Arial', sans-serif;
+    margin: 0;
+    background: #f0f2f5;
 }
 
 .container {
     padding: 0 15px;
+    max-width: 800px;
+    margin: 0 auto;
 }
 
 /* =========================
@@ -27,37 +29,46 @@ body {
 ========================= */
 
 header {
-    text-align:center;
-    padding:20px 0;
-    border-bottom:3px solid #0056b3;
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 3px solid #0056b3;
+}
+
+.post {
+    background: #fff;
+    padding: 20px;
+    margin: 20px 0;
+    border-radius: 10px;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
 }
 
 .post h2 {
-    color:#1a1a1a;
-    line-height:1.4;
-    font-size:24px;
+    color: #1a1a1a;
+    line-height: 1.4;
+    font-size: 24px;
 }
 
 .post p {
-    line-height:1.8;
-    color:#333;
+    line-height: 1.8;
+    color: #333;
 }
 
 .sknteam_image {
-    text-align:center;
-    margin:20px 0;
+    text-align: center;
+    margin: 20px 0;
 }
 
 .sknteam_image img {
-    width:50%;
-    max-width:100%;
-    border-radius:10px;
+    width: 100%;
+    max-width: 100%;
+    border-radius: 10px;
+    height: auto;
 }
 
 footer {
-    text-align:center;
-    padding:20px;
-    color:#777;
+    text-align: center;
+    padding: 20px;
+    color: #777;
 }
 
 /* =========================
@@ -65,20 +76,20 @@ footer {
 ========================= */
 
 .ad-overlay {
-    position:fixed;
-    inset:0;
-    display:none;
-    align-items:center;
-    justify-content:center;
-    z-index:99999;
+    position: fixed;
+    inset: 0;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    z-index: 99999;
     background: rgba(0, 0, 0, 0.6);
 }
 
 .ad-overlay.show {
-    display:flex;
+    display: flex;
 }
 
-/* Advertisement box - Fixed to 800x450 with responsiveness */
+/* Advertisement box - Fixed exactly to 800x450 */
 .ad-content {
     width: 800px;
     max-width: 95vw;
@@ -91,45 +102,45 @@ footer {
     background: #000;
 }
 
-/* Video & Image Media display inside Ad Content */
+/* Video display inside Ad Content */
 .ad-media {
-    display:block;
-    width:100%;
-    height:100%;
-    object-fit:cover;
-    border-radius:25px;
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    border-radius: 25px;
 }
 
 /* Close Button */
 .modal-close {
-    position:absolute;
-    top:12px;
-    right:12px;
-    width:38px;
-    height:38px;
-    border-radius:50%;
-    border:none;
-    background:rgba(0,0,0,0.65);
-    color:white;
-    font-size:20px;
-    font-weight:bold;
-    cursor:pointer;
-    z-index:999999;
-    display:flex;
-    justify-content:center;
-    align-items:center;
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    width: 38px;
+    height: 38px;
+    border-radius: 50%;
+    border: none;
+    background: rgba(0,0,0,0.65);
+    color: white;
+    font-size: 20px;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 999999;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     transition: all 0.3s ease;
 }
 
 .modal-close:hover {
-    background:black;
-    transform:scale(1.1);
+    background: black;
+    transform: scale(1.1);
 }
 
 /* Prevent background body scroll */
 .no-scroll {
-    overflow:hidden;
-    height:100vh;
+    overflow: hidden;
+    height: 100vh;
 }
 
 </style>
@@ -175,12 +186,11 @@ footer {
 
     <div id="adContent" class="ad-content">
 
-        <!-- MP4 Video (Muted removed so imported video sound plays) -->
+        <!-- MP4 Video (Sound On) -->
         <video
             id="modalVideo"
             class="ad-media"
-            src="./Ask VIYA_Ads_Desktop_001.mp4"
-            autoplay
+            src="./Ask VIYA_Ads_Desktop_001_V2.mp4"
             playsinline
             preload="auto">
             Your browser does not support video playback.
@@ -205,9 +215,11 @@ const landingPageUrl = "https://www.facebook.com/viyacambodiaconsumer?mibextid=w
 
 let scrollY = 0;
 
-// Check if desktop device (width greater than 768px)
+// Check if true desktop device (Width > 768px AND uses a mouse/pointer)
 function isDesktop(){
-    return window.innerWidth > 768;
+    const isWide = window.innerWidth > 768;
+    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
+    return isWide && hasFinePointer;
 }
 
 // Lock background scroll when modal opens
@@ -226,9 +238,10 @@ function unlockScroll(){
     window.scrollTo(0, scrollY);
 }
 
-// Show the Ad
+// Show the Ad (Desktop only with sound on)
 function showAd(){
     if(!isDesktop()){
+        hideAd();
         return;
     }
 
@@ -236,23 +249,25 @@ function showAd(){
     lockScroll();
 
     if (video) {
+        video.muted = false; // Ensure audio is explicitly unmuted
         video.currentTime = 0;
         const playPromise = video.play();
         if (playPromise !== undefined) {
             playPromise.catch(error => {
-                console.log("Autoplay blocked:", error);
+                console.log("Autoplay with sound blocked by browser policy:", error);
             });
         }
     }
 }
 
-// Hide the Ad
+// Hide the Ad and completely stop video
 function hideAd(){
     overlay.classList.remove("show");
     unlockScroll();
 
     if (video) {
         video.pause();
+        video.currentTime = 0;
     }
 }
 
@@ -265,6 +280,8 @@ if (video) {
 window.addEventListener("load", ()=>{
     if(isDesktop()){
         showAd();
+    } else {
+        hideAd();
     }
 });
 
