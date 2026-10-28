@@ -4,7 +4,7 @@
 <head>
 <meta charset="UTF-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-
+<script src="./revive-popup-pc (2).js"></script>
 <title>Khmer Daily News - Demo</title>
 
 <style>
@@ -201,124 +201,6 @@ footer {
     </div>
 
 </div>
-
-
-<script>
-(function(){
-
-const overlay = document.getElementById("adOverlay");
-const closeBtn = document.getElementById("modalClose");
-const adContent = document.getElementById("adContent");
-const video = document.getElementById("modalVideo");
-
-const landingPageUrl = "https://www.facebook.com/viyacambodiaconsumer?mibextid=wwXIfr&rdid=iRNRIykDPJMGFLLd&share_url=https%253A%252F%252Fwww.facebook.com%252Fshare%252F17n8yusZHt%252F%253Fmibextid%253DwwXIfr";
-
-let scrollY = 0;
-
-// Check if true desktop device (Width > 768px AND uses a mouse/pointer)
-function isDesktop(){
-    const isWide = window.innerWidth > 768;
-    const hasFinePointer = window.matchMedia('(pointer: fine)').matches;
-    return isWide && hasFinePointer;
-}
-
-// Lock background scroll when modal opens
-function lockScroll(){
-    scrollY = window.scrollY;
-    document.body.style.position = "fixed";
-    document.body.style.top = `-${scrollY}px`;
-    document.body.style.width = "100%";
-}
-
-// Unlock background scroll when modal closes
-function unlockScroll(){
-    document.body.style.position = "";
-    document.body.style.top = "";
-    document.body.style.width = "";
-    window.scrollTo(0, scrollY);
-}
-
-// Show the Ad (Desktop only with sound on)
-function showAd(){
-    if(!isDesktop()){
-        hideAd();
-        return;
-    }
-
-    overlay.classList.add("show");
-    lockScroll();
-
-    if (video) {
-        video.muted = false; // Ensure audio is explicitly unmuted
-        video.currentTime = 0;
-        const playPromise = video.play();
-        if (playPromise !== undefined) {
-            playPromise.catch(error => {
-                console.log("Autoplay with sound blocked by browser policy:", error);
-            });
-        }
-    }
-}
-
-// Hide the Ad and completely stop video
-function hideAd(){
-    overlay.classList.remove("show");
-    unlockScroll();
-
-    if (video) {
-        video.pause();
-        video.currentTime = 0;
-    }
-}
-
-// Auto-close ad when video completes playback
-if (video) {
-    video.addEventListener("ended", hideAd);
-}
-
-// Show popup once page loads (if desktop)
-window.addEventListener("load", ()=>{
-    if(isDesktop()){
-        showAd();
-    } else {
-        hideAd();
-    }
-});
-
-// Responsive screen resize check
-window.addEventListener("resize", ()=>{
-    if(!isDesktop()){
-        hideAd();
-    }
-});
-
-// Close button click
-closeBtn.addEventListener("click", (e)=>{
-    e.stopPropagation();
-    hideAd();
-});
-
-// Click on ad body redirects to target URL
-adContent.addEventListener("click", ()=>{
-    window.location.href = landingPageUrl;
-});
-
-// Click on dark backdrop closes modal
-overlay.addEventListener("click", (e)=>{
-    if(e.target === overlay){
-        hideAd();
-    }
-});
-
-// Close on ESC keypress
-document.addEventListener("keydown", (e)=>{
-    if(e.key === "Escape"){
-        hideAd();
-    }
-});
-
-})();
-</script>
 
 </body>
 </html>

@@ -1,0 +1,996 @@
+<!doctype html>
+<html lang="km">
+
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+<title>Khmer Daily News - VIYA Popup Demo</title>
+
+<style>
+
+/* =========================
+   BASE STYLES
+========================= */
+
+body {
+    font-family: 'Kantumruy Pro', 'Arial', sans-serif;
+    margin: 0;
+    background: #f0f2f5;
+}
+
+.container {
+    max-width: 800px;
+    margin: 0 auto;
+    padding: 0 15px;
+}
+
+
+/* =========================
+   NEWS CONTENT
+========================= */
+
+header {
+    text-align: center;
+    padding: 20px 0;
+    border-bottom: 3px solid #0056b3;
+}
+
+.post h2 {
+    color: #1a1a1a;
+    line-height: 1.4;
+    font-size: 24px;
+}
+
+.post p {
+    line-height: 1.8;
+    color: #333;
+}
+
+.sknteam_image {
+    text-align: center;
+    margin: 20px 0;
+}
+
+.sknteam_image img {
+    width: 100%;
+    max-width: 500px;
+    border-radius: 10px;
+}
+
+footer {
+    text-align: center;
+    padding: 20px;
+    color: #777;
+}
+
+
+/* =========================
+   POPUP POSITION WRAPPER
+   NO DARK OVERLAY
+========================= */
+
+.ad-overlay {
+
+    position: fixed;
+    inset: 0;
+
+    width: 100vw;
+    height: 100vh;
+    height: 100dvh;
+
+    display: none;
+
+    align-items: center;
+    justify-content: center;
+
+    padding: 16px;
+
+    box-sizing: border-box;
+
+    z-index: 2147483647;
+
+    background: transparent;
+
+    /*
+     * Page remains clickable
+     * outside popup.
+     */
+    pointer-events: none;
+}
+
+.ad-overlay.show {
+    display: flex;
+}
+
+
+/* =========================
+   MOBILE POPUP
+   MAX 320 × 600
+========================= */
+
+.ad-content {
+
+    position: relative;
+
+    width: min(
+        320px,
+        calc(100vw - 32px)
+    );
+
+    height: min(
+        600px,
+        calc(100dvh - 32px)
+    );
+
+    overflow: hidden;
+
+    border-radius: 0;
+
+    background: transparent;
+
+    pointer-events: auto;
+    cursor: pointer;
+}
+
+
+/* =========================
+   VIDEO
+========================= */
+
+.ad-media {
+
+    display: block;
+
+    width: 100%;
+    height: 100%;
+
+    margin: 0;
+    padding: 0;
+
+    border: 0;
+
+    object-fit: cover;
+    object-position: center center;
+
+    background: #000;
+
+    pointer-events: none;
+}
+
+
+/* =========================
+   CLOSE BUTTON
+========================= */
+
+.modal-close {
+
+    position: absolute;
+
+    top: 10px;
+    right: 10px;
+
+    width: 40px;
+    height: 40px;
+
+    border: 0;
+    border-radius: 0;
+
+    background: transparent;
+
+    color: #fff;
+
+    font-family: Arial, sans-serif;
+    font-size: 30px;
+    font-weight: 400;
+    line-height: 1;
+
+    cursor: pointer;
+
+    z-index: 2147483647;
+
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
+    text-shadow:
+        0 1px 4px rgba(0,0,0,.8);
+
+    pointer-events: auto;
+}
+
+
+/* =========================
+   SOUND BUTTON
+========================= */
+
+.sound-button {
+
+    position: absolute;
+
+    left: 12px;
+    bottom: 12px;
+
+    min-height: 40px;
+
+    padding: 8px 14px;
+
+    border: 0;
+    border-radius: 20px;
+
+    background: rgba(0,0,0,.65);
+
+    color: #fff;
+
+    font-family: Arial, sans-serif;
+    font-size: 14px;
+    font-weight: 600;
+
+    cursor: pointer;
+
+    z-index: 2147483647;
+
+    display: none;
+
+    pointer-events: auto;
+}
+
+
+/* =========================
+   DESKTOP POPUP
+   MAX 800 × 450
+========================= */
+
+@media (min-width: 769px) {
+
+    .ad-overlay {
+        padding: 60px;
+    }
+
+    .ad-content {
+
+        width: min(
+            800px,
+            calc(100vw - 120px),
+            calc((100dvh - 120px) * 1.7777778)
+        );
+
+        height: auto;
+
+        aspect-ratio: 16 / 9;
+
+        max-height:
+            calc(100dvh - 120px);
+    }
+
+}
+
+
+/* =========================
+   SMALL DESKTOP
+========================= */
+
+@media
+(max-width: 900px) and (min-width: 769px),
+(max-height: 650px) and (min-width: 769px) {
+
+    .ad-overlay {
+        padding: 32px;
+    }
+
+    .ad-content {
+
+        width: min(
+            800px,
+            calc(100vw - 64px),
+            calc((100dvh - 64px) * 1.7777778)
+        );
+
+        max-height:
+            calc(100dvh - 64px);
+    }
+}
+
+</style>
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+    <header>
+        <h1>សារព័ត៌មាន Khmer Daily</h1>
+    </header>
+
+
+    <div class="post">
+
+        <h2>
+            ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត"
+            ដ៏ធំសម្បើមនៅខេត្តសៀមរាប
+        </h2>
+
+        <div class="sknteam_image">
+
+            <img
+                src="https://sknteam.com/media/ai_cambodia.jpeg"
+                alt="Angkor Sangkranta"
+            >
+
+        </div>
+
+        <p>
+            ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា
+            ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។
+        </p>
+
+        <p>
+            ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ
+            ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។
+        </p>
+
+    </div>
+
+
+    <div class="post">
+
+        <h2>
+            ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត"
+            ដ៏ធំសម្បើមនៅខេត្តសៀមរាប
+        </h2>
+
+        <div class="sknteam_image">
+
+            <img
+                src="https://sknteam.com/media/ai_cambodia.jpeg"
+                alt="Angkor Sangkranta"
+            >
+
+        </div>
+
+        <p>
+            ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា
+            ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។
+        </p>
+
+        <p>
+            ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ
+            ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។
+        </p>
+
+    </div>
+
+
+    <div class="post">
+
+        <h2>
+            ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត"
+            ដ៏ធំសម្បើមនៅខេត្តសៀមរាប
+        </h2>
+
+        <div class="sknteam_image">
+
+            <img
+                src="https://sknteam.com/media/ai_cambodia.jpeg"
+                alt="Angkor Sangkranta"
+            >
+
+        </div>
+
+        <p>
+            ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា
+            ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។
+        </p>
+
+        <p>
+            ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ
+            ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។
+        </p>
+
+    </div>
+
+
+    <footer>
+        រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 Khmer Daily News
+    </footer>
+
+</div>
+
+
+
+<!-- =========================
+     VIYA POPUP
+========================= -->
+
+<div
+    id="adOverlay"
+    class="ad-overlay"
+>
+
+    <div
+        id="adContent"
+        class="ad-content"
+    >
+
+        <video
+            id="modalVideo"
+            class="ad-media"
+            playsinline
+            preload="auto"
+        >
+            Your browser does not support video playback.
+        </video>
+
+
+        <button
+            id="soundButton"
+            class="sound-button"
+            type="button"
+        >
+            🔊 Tap for Sound
+        </button>
+
+
+        <button
+            id="modalClose"
+            class="modal-close"
+            type="button"
+            aria-label="Close Advertisement"
+        >
+            ×
+        </button>
+
+    </div>
+
+</div>
+
+
+
+<script>
+(function () {
+
+    'use strict';
+
+
+    /* =========================
+       CONFIG
+    ========================= */
+
+    var MOBILE_VIDEO_URL =
+        "https://sknteam.com/media/Viya/VIYA_popup_27sep2026.mp4";
+
+
+    var DESKTOP_VIDEO_URL =
+        "https://sknteam.com/media/Viya/Ask%20VIYA_Ads_Desktop_001_V2.mp4";
+
+
+    /*
+     * Local demo uses direct landing URL.
+     *
+     * Do NOT use {clickurl} here.
+     * Revive macro is only for
+     * production Generic HTML.
+     */
+    var LANDING_URL =
+        "https://www.facebook.com/share/17n8yusZHt/?mibextid=wwXIfr";
+
+
+    var AUTO_CLOSE_MS =
+        5000;
+
+
+    var LOAD_TIMEOUT_MS =
+        10000;
+
+
+
+    /* =========================
+       ELEMENTS
+    ========================= */
+
+    var overlay =
+        document.getElementById(
+            "adOverlay"
+        );
+
+
+    var adContent =
+        document.getElementById(
+            "adContent"
+        );
+
+
+    var video =
+        document.getElementById(
+            "modalVideo"
+        );
+
+
+    var closeButton =
+        document.getElementById(
+            "modalClose"
+        );
+
+
+    var soundButton =
+        document.getElementById(
+            "soundButton"
+        );
+
+
+    var closeTimer = null;
+    var loadTimer = null;
+
+    var shown = false;
+    var closed = false;
+
+
+
+    /* =========================
+       DEVICE
+    ========================= */
+
+    function isMobile() {
+
+        return (
+            window.innerWidth <= 768
+        );
+    }
+
+
+
+    /* =========================
+       SELECT VIDEO
+    ========================= */
+
+    function setVideoSource() {
+
+        if (isMobile()) {
+
+            video.src =
+                MOBILE_VIDEO_URL;
+
+            console.log(
+                "[VIYA Demo] Mobile video — 320×600 popup"
+            );
+
+        } else {
+
+            video.src =
+                DESKTOP_VIDEO_URL;
+
+            console.log(
+                "[VIYA Demo] Desktop video — 800×450 popup"
+            );
+        }
+
+
+        video.load();
+    }
+
+
+
+    /* =========================
+       SOUND BUTTON
+    ========================= */
+
+    function showSoundButton() {
+
+        soundButton.style.display =
+            "block";
+    }
+
+
+    function hideSoundButton() {
+
+        soundButton.style.display =
+            "none";
+    }
+
+
+
+    /* =========================
+       CLOSE POPUP
+    ========================= */
+
+    function hideAd() {
+
+        if (closed) {
+            return;
+        }
+
+
+        closed = true;
+
+
+        if (loadTimer) {
+
+            clearTimeout(
+                loadTimer
+            );
+
+            loadTimer = null;
+        }
+
+
+        if (closeTimer) {
+
+            clearTimeout(
+                closeTimer
+            );
+
+            closeTimer = null;
+        }
+
+
+        try {
+
+            video.pause();
+
+        } catch (e) {}
+
+
+        overlay.classList.remove(
+            "show"
+        );
+
+
+        console.log(
+            "[VIYA Demo] Popup closed"
+        );
+    }
+
+
+
+    /* =========================
+       TRY PLAY WITH SOUND
+    ========================= */
+
+    function startPlayback() {
+
+        /*
+         * First attempt:
+         * Sound ON
+         */
+
+        video.muted = false;
+        video.volume = 1;
+
+
+        var playPromise;
+
+
+        try {
+
+            playPromise =
+                video.play();
+
+        } catch (e) {
+
+            playPromise = null;
+        }
+
+
+        if (
+            playPromise &&
+            typeof playPromise.then ===
+                "function"
+        ) {
+
+            playPromise
+                .then(function () {
+
+                    /*
+                     * Browser allowed
+                     * autoplay with sound.
+                     */
+
+                    console.log(
+                        "[VIYA Demo] Sound autoplay allowed"
+                    );
+
+
+                    hideSoundButton();
+
+                })
+                .catch(function () {
+
+                    /*
+                     * Sound autoplay blocked.
+                     *
+                     * Fall back to muted video.
+                     */
+
+                    console.log(
+                        "[VIYA Demo] Sound autoplay blocked — using muted fallback"
+                    );
+
+
+                    video.muted = true;
+
+
+                    var mutedPlay =
+                        video.play();
+
+
+                    if (
+                        mutedPlay &&
+                        typeof mutedPlay.catch ===
+                            "function"
+                    ) {
+
+                        mutedPlay.catch(
+                            function (error) {
+
+                                console.log(
+                                    "[VIYA Demo] Muted autoplay failed:",
+                                    error
+                                );
+                            }
+                        );
+                    }
+
+
+                    showSoundButton();
+                });
+
+        } else {
+
+            /*
+             * Older browser fallback.
+             */
+
+            video.muted = true;
+
+
+            try {
+
+                video.play();
+
+            } catch (e) {}
+
+
+            showSoundButton();
+        }
+    }
+
+
+
+    /* =========================
+       SHOW POPUP
+    ========================= */
+
+    function showAd() {
+
+        if (
+            shown ||
+            closed
+        ) {
+            return;
+        }
+
+
+        shown = true;
+
+
+        if (loadTimer) {
+
+            clearTimeout(
+                loadTimer
+            );
+
+            loadTimer = null;
+        }
+
+
+        overlay.classList.add(
+            "show"
+        );
+
+
+        startPlayback();
+
+
+        /*
+         * Match production popup:
+         * close 5 seconds after visible.
+         */
+
+        closeTimer =
+            setTimeout(
+                hideAd,
+                AUTO_CLOSE_MS
+            );
+
+
+        console.log(
+            "[VIYA Demo] Popup visible"
+        );
+    }
+
+
+
+    /* =========================
+       VIDEO READY
+    ========================= */
+
+    video.addEventListener(
+        "loadeddata",
+        showAd,
+        {
+            once: true
+        }
+    );
+
+
+    video.addEventListener(
+        "canplay",
+        showAd,
+        {
+            once: true
+        }
+    );
+
+
+
+    /* =========================
+       VIDEO ERROR
+    ========================= */
+
+    video.addEventListener(
+        "error",
+        function () {
+
+            console.error(
+                "[VIYA Demo] Video failed to load"
+            );
+
+
+            hideAd();
+        },
+        {
+            once: true
+        }
+    );
+
+
+
+    /* =========================
+       TAP FOR SOUND
+    ========================= */
+
+    soundButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+
+            video.muted = false;
+            video.volume = 1;
+
+
+            var promise =
+                video.play();
+
+
+            if (
+                promise &&
+                typeof promise.then ===
+                    "function"
+            ) {
+
+                promise
+                    .then(function () {
+
+                        console.log(
+                            "[VIYA Demo] Sound enabled by user"
+                        );
+
+
+                        hideSoundButton();
+
+                    })
+                    .catch(function () {
+
+                        showSoundButton();
+
+                    });
+            }
+
+        }
+    );
+
+
+
+    /* =========================
+       CLOSE BUTTON
+    ========================= */
+
+    closeButton.addEventListener(
+        "click",
+        function (event) {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            hideAd();
+        }
+    );
+
+
+
+    /* =========================
+       CREATIVE CLICK
+    ========================= */
+
+    adContent.addEventListener(
+        "click",
+        function () {
+
+            window.open(
+                LANDING_URL,
+                "_blank",
+                "noopener,noreferrer"
+            );
+
+        }
+    );
+
+
+
+    /* =========================
+       ESC CLOSE
+    ========================= */
+
+    document.addEventListener(
+        "keydown",
+        function (event) {
+
+            if (
+                event.key ===
+                "Escape"
+            ) {
+
+                hideAd();
+            }
+
+        }
+    );
+
+
+
+    /* =========================
+       START
+    ========================= */
+
+    setVideoSource();
+
+
+    loadTimer =
+        setTimeout(
+            function () {
+
+                if (!shown) {
+
+                    console.warn(
+                        "[VIYA Demo] Video load timeout"
+                    );
+
+
+                    hideAd();
+                }
+
+            },
+            LOAD_TIMEOUT_MS
+        );
+
+})();
+</script>
+
+
+</body>
+</html>

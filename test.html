@@ -1,202 +1,291 @@
-
-<!DOCTYPE html>
+<!doctype html>
 <html lang="km">
+
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-    <title>Khmer Daily News</title>
+<title>Khmer Daily News - Demo</title>
 
-    <!-- Load your existing external popup script -->
-    <script
-        src="https://sknteam.com/ad-scripts/popup/revive-popup.js"
-        defer>
-    </script>
+<style>
+body {
+    font-family:'Kantumruy Pro','Arial',sans-serif;
+    margin:0;
+    background:#f0f2f5;
+}
 
-    <style>
-        * {
-            box-sizing: border-box;
-        }
+/* Prevent scroll when class is added */
+body.no-scroll {
+    overflow: hidden;
+}
 
-        body {
-            margin: 0;
-            font-family: "Kantumruy Pro", Arial, sans-serif;
-            background: #f0f2f5;
-            color: #222;
-        }
+/* =========================
+     NEWS CONTENT
+========================= */
 
-        .container {
-            max-width: 800px;
-            margin: auto;
-            padding: 0 15px;
-        }
+header {
+    text-align:center;
+    padding:20px 0;
+    border-bottom:3px solid #0056b3;
+}
 
-        header {
-            padding: 20px 0;
-            text-align: center;
-            border-bottom: 3px solid #0056b3;
-        }
+.post h2 {
+    color:#1a1a1a;
+    line-height:1.4;
+    font-size:24px;
+}
 
-        header h1 {
-            margin: 0;
-            color: #0056b3;
-        }
+.post p {
+    line-height:1.8;
+    color:#333;
+}
 
-        .post {
-            padding: 20px 0;
-            border-bottom: 1px solid #ddd;
-        }
+.sknteam_image {
+    text-align:center;
+    margin:20px 0;
+}
 
-        .post h2 {
-            font-size: 23px;
-            line-height: 1.6;
-        }
+.sknteam_image img {
+    width:100%;
+    max-width:500px;
+    border-radius:10px;
+}
 
-        .post p {
-            color: #333;
-            line-height: 1.9;
-        }
+footer {
+    text-align:center;
+    padding:20px;
+    color:#777;
+}
 
-        .sknteam_image {
-            margin: 20px 0;
-            text-align: center;
-        }
+/* =========================
+      AD POPUP
+========================= */
 
-        .sknteam_image img {
-            display: block;
-            width: 100%;
-            max-width: 500px;
-            height: auto;
-            margin: auto;
-            border-radius: 10px;
-        }
+.ad-overlay {
+    position:fixed;
+    inset:0;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    background:rgba(0,0,0,0.35);
+    z-index:99999;
+}
 
-        footer {
-            padding: 20px 0;
-            text-align: center;
-            color: #777;
-        }
+.ad-overlay.show {
+    display:flex;
+}
 
-        /* Popup structure, available for a script that supports it */
-        .ad-overlay {
-            position: fixed;
-            inset: 0;
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 12px;
-            background: rgba(0, 0, 0, 0.75);
-            z-index: 99999;
-        }
+/* Advertisement box */
+.ad-content {
+    width: 800px;
+    max-width: 92vw;
+    height: auto;
+    position:relative;
+    border-radius:1rem;
+    overflow:hidden;
+    background:transparent;
+}
 
-        .ad-overlay.show {
-            display: flex;
-        }
+/* Lottie */
+#adOverlay lottie-player,
+#adOverlay #modalLottie {
+    display:block;
+    width:100%;
+    height:auto;
+    border-radius:25px;
+    background:transparent;
+}
 
-        .ad-content {
-            position: relative;
-            width: min(90vw, 420px);
-            max-height: 90vh;
-            overflow: hidden;
-            border-radius: 20px;
-            background: #000;
-        }
+/* Close Button */
+.modal-close {
+    position:absolute;
+    top:20px;
+    right:20px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    border:2px solid #fff;
+    background:#000 !important;
+    color:#fff;
+    font-size:24px;
+    font-weight:bold;
+    line-height:1;
+    padding:0;
+    cursor:pointer;
+    z-index:100000;
+    transition:0.3s;
+    box-shadow:0 4px 12px rgba(0,0,0,0.3);
+}
 
-        .ad-media {
-            display: block;
-            width: 100%;
-            max-height: 90vh;
-            height: auto;
-            object-fit: contain;
-        }
+.modal-close:hover {
+    background:#222 !important;
+    transform:scale(1.08);
+}
+</style>
 
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 2;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            width: 38px;
-            height: 38px;
-            border: 0;
-            border-radius: 50%;
-            background: rgba(0, 0, 0, 0.75);
-            color: white;
-            font-size: 20px;
-            cursor: pointer;
-        }
+<script src="https://unpkg.com/@lottiefiles/lottie-player@latest/dist/lottie-player.js"></script>
 
-    
-    </style>
 </head>
 
 <body>
-    <div class="container">
 
-        <header>
-            <h1>សារព័ត៌មាន Khmer Daily</h1>
-        </header>
+<div class="container">
 
-        <main>
-            <article class="post">
-                <h2>ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប</h2>
+<header>
+<h1>
+សារព័ត៌មាន Khmer Daily
+</h1>
+</header>
 
-                <div class="sknteam_image">
-                    <img
-                        src="https://sknteam.com/media/ai_cambodia.jpeg"
-                        alt="អង្គរសង្ក្រាន្ត">
-                </div>
+<div class="post">
+<h2>
+ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប
+</h2>
+<div class="sknteam_image">
+<img src="https://sknteam.com/media/ai_cambodia.jpeg">
+</div>
+<p>
+ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា
+ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។
+</p>
+<p>
+ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ
+ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។
+</p>
+</div>
 
-                <p>ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។</p>
+<div class="post">
+<h2>
+ត្រៀមរៀបចំព្រឹត្តិការណ៍ "អង្គរសង្ក្រាន្ត" ដ៏ធំសម្បើមនៅខេត្តសៀមរាប
+</h2>
+<div class="sknteam_image">
+<img src="https://sknteam.com/media/ai_cambodia.jpeg">
+</div>
+<p>
+ខេត្តសៀមរាប៖ អាជ្ញាធរខេត្តសៀមរាបបានប្រកាសថា
+ត្រៀមរៀបចំព្រឹត្តិការណ៍អង្គរសង្ក្រាន្តឆ្នាំ២០២៦។
+</p>
+<p>
+ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ
+ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។
+</p>
+</div>
 
-                <p>ព្រឹត្តិការណ៍នេះនឹងមានការបង្ហាញវប្បធម៌ខ្មែរ ល្បែងប្រជាប្រិយ និងការប្រគំតន្ត្រី។</p>
-            </article>
+<footer>
+រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 Khmer Daily News
+</footer>
 
-            <article class="post">
-                <h2>ព័ត៌មានវប្បធម៌ និងប្រពៃណីខ្មែរ</h2>
+</div>
 
-                <div class="sknteam_image">
-                    <img
-                        src="https://sknteam.com/media/ai_cambodia.jpeg"
-                        alt="វប្បធម៌ខ្មែរ">
-                </div>
+<!-- =========================
+        POPUP AD
+========================= -->
+<div id="adOverlay" class="ad-overlay">
+    <div id="adContent" class="ad-content">
+        <lottie-player
+            id="modalLottie"
+            src=""
+            background="transparent"
+            speed="1"
+            autoplay>
+        </lottie-player>
 
-                <p>សូមតាមដានព័ត៌មានថ្មីៗ និងព្រឹត្តិការណ៍សំខាន់ៗនៅកម្ពុជា តាមរយៈ Khmer Daily News។</p>
-            </article>
-        </main>
-
-        <footer>
-            រក្សាសិទ្ធិគ្រប់យ៉ាង © 2026 Khmer Daily News
-        </footer>
+        <button id="modalClose" class="modal-close">
+            ✕
+        </button>
     </div>
+</div>
 
-    <!-- Popup markup: only useful if revive-popup.js supports
-         these element IDs/classes or uses this markup by configuration. -->
-    <div id="adOverlay" class="ad-overlay">
-        <div id="adContent" class="ad-content">
+<script>
+(function(){
+const overlay = document.getElementById("adOverlay");
+const closeBtn = document.getElementById("modalClose");
+const ad = document.getElementById("adContent");
+const lottie = document.getElementById("modalLottie");
+const landingPageUrl = "";
 
-            <video
-                id="modalVideo"
-                class="ad-media"
-                src="./VIYA.mp4"
-                autoplay
-                muted
-                playsinline
-                preload="auto">
-                Your browser does not support video playback.
-            </video>
+// Set popup type here: "mobile" or "pc"
+const popupType = "pc";
 
-            <button
-                id="modalClose"
-                class="modal-close"
-                type="button"
-                aria-label="Close advertisement">
-                &times;
-            </button>
+function isMobile(){
+    return window.innerWidth <= 768;
+}
 
-        </div>
-    </div>
+function shouldShowPopup(){
+    if(popupType === "mobile"){
+        return isMobile();
+    }
+    return !isMobile();
+}
+
+function lockScroll(){
+    document.body.classList.add("no-scroll");
+}
+
+function unlockScroll(){
+    document.body.classList.remove("no-scroll");
+}
+
+function showAd(){
+    if(!shouldShowPopup()){
+        hideAd();
+        return;
+    }
+    overlay.classList.add("show");
+    lockScroll();
+}
+
+function hideAd(){
+    overlay.classList.remove("show");
+    unlockScroll();
+}
+
+// Auto-close when the animation finishes
+if(lottie){
+    lottie.addEventListener("load", () => {
+        if (typeof lottie.play === "function") {
+            lottie.play();
+        }
+    });
+
+    lottie.addEventListener("complete", hideAd);
+    lottie.addEventListener("ended", hideAd);
+    lottie.addEventListener("finish", hideAd);
+}
+
+// Show popup on load if conditions match
+window.addEventListener("load", () => {
+    if(shouldShowPopup()){
+        showAd();
+    }
+});
+
+// Close button
+closeBtn.addEventListener("click", (e) => {
+    e.stopPropagation();
+    hideAd();
+});
+
+// Click on ad content -> go to landing page
+ad.addEventListener("click", () => {
+    window.location.href = landingPageUrl;
+});
+
+// Click outside popup
+overlay.addEventListener("click", (e) => {
+    if(e.target === overlay){
+        hideAd();
+    }
+});
+
+// ESC close
+document.addEventListener("keydown", (e) => {
+    if(e.key === "Escape"){
+        hideAd();
+    }
+});
+})();
+</script>
+
 </body>
 </html>
